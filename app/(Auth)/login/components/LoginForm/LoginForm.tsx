@@ -18,8 +18,10 @@ const LoginForm: React.FC = () => {
   } = useLoginForm();
 
   useEffect(() => {
-    if (isError) toast.error(error?.message);
-  }, [error]);
+    if (isError && error) {
+      toast.error(error.message);
+    }
+  }, [isError, error]);
 
   return (
     <form className="w-full" onSubmit={handleSubmit(onSubmit)}>

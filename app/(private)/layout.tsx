@@ -2,10 +2,9 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
-import Header from "./components/Header";
+import { useAuth } from "@/providers/AuthProvider";
 
-export default function ProtectedLayout({
+export default function PrivateLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -23,12 +22,5 @@ export default function ProtectedLayout({
     return <div>Loading...</div>;
   }
 
-  return (
-    <div className="protected-layout">
-      <header>
-        <Header />
-      </header>
-      <main>{children}</main>
-    </div>
-  );
+  return <div className="private-layout">{children}</div>;
 }

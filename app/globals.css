@@ -6,17 +6,13 @@
 @font-face {
   font-family: "SF Pro";
   src: url("../fonts/SF_Pro.OTF") format("opentype");
-  font-weight: 400;
   font-style: normal;
-  font-display: swap;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: "SF Pro";
-  --font-mono: "SF Mono", ui-monospace, Menlo, Monaco, "Cascadia Mono",
-    monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -445,76 +441,76 @@
     border-radius: var(--radius-full);
   }
   /* Gray color utilities */
-  .bg-gray-25 {
+  .bg-neutral-25 {
     background-color: var(--gray-25);
   }
-  .bg-gray-50 {
+  .bg-neutral-50 {
     background-color: var(--gray-50);
   }
-  .bg-gray-100 {
+  .bg-neutral-100 {
     background-color: var(--gray-100);
   }
-  .bg-gray-200 {
+  .bg-neutral-200 {
     background-color: var(--gray-200);
   }
-  .bg-gray-300 {
+  .bg-neutral-300 {
     background-color: var(--gray-300);
   }
-  .bg-gray-400 {
+  .bg-neutral-400 {
     background-color: var(--gray-400);
   }
-  .bg-gray-500 {
+  .bg-neutral-500 {
     background-color: var(--gray-500);
   }
-  .bg-gray-600 {
+  .bg-neutral-600 {
     background-color: var(--gray-600);
   }
-  .bg-gray-700 {
+  .bg-neutral-700 {
     background-color: var(--gray-700);
   }
-  .bg-gray-800 {
+  .bg-neutral-800 {
     background-color: var(--gray-800);
   }
-  .bg-gray-900 {
+  .bg-neutral-900 {
     background-color: var(--gray-900);
   }
-  .bg-gray-950 {
+  .bg-neutral-950 {
     background-color: var(--gray-950);
   }
-  .text-gray-25 {
+  .text-neutral-25 {
     color: var(--gray-25);
   }
-  .text-gray-50 {
+  .text-neutral-50 {
     color: var(--gray-50);
   }
-  .text-gray-100 {
+  .text-neutral-100 {
     color: var(--gray-100);
   }
-  .text-gray-200 {
+  .text-neutral-200 {
     color: var(--gray-200);
   }
-  .text-gray-300 {
+  .text-neutral-300 {
     color: var(--gray-300);
   }
-  .text-gray-400 {
+  .text-neutral-400 {
     color: var(--gray-400);
   }
-  .text-gray-500 {
+  .text-neutral-500 {
     color: var(--gray-500);
   }
-  .text-gray-600 {
+  .text-neutral-600 {
     color: var(--gray-600);
   }
-  .text-gray-700 {
+  .text-neutral-700 {
     color: var(--gray-700);
   }
-  .text-gray-800 {
+  .text-neutral-800 {
     color: var(--gray-800);
   }
-  .text-gray-900 {
+  .text-neutral-900 {
     color: var(--gray-900);
   }
-  .text-gray-950 {
+  .text-neutral-950 {
     color: var(--gray-950);
   }
   .text-accent-red {
@@ -531,5 +527,42 @@
   }
   .text-accent-darkgray {
     color: var(--accent-darkgray);
+  }
+
+  .border-neutral-25 {
+    border-color: var(--gray-25);
+  }
+  .border-neutral-50 {
+    border-color: var(--gray-50);
+  }
+  .border-neutral-100 {
+    border-color: var(--gray-100);
+  }
+  .border-neutral-200 {
+    border-color: var(--gray-200);
+  }
+  .border-neutral-300 {
+    border-color: var(--gray-300);
+  }
+  .border-neutral-400 {
+    border-color: var(--gray-400);
+  }
+  .border-neutral-500 {
+    border-color: var(--gray-500);
+  }
+  .border-neutral-600 {
+    border-color: var(--gray-600);
+  }
+  .border-neutral-700 {
+    border-color: var(--gray-700);
+  }
+  .border-neutral-800 {
+    border-color: var(--gray-800);
+  }
+  .border-neutral-900 {
+    border-color: var(--gray-900);
+  }
+  .border-neutral-950 {
+    border-color: var(--gray-950);
   }
 }

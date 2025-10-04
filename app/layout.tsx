@@ -3,6 +3,7 @@ import QueryProvider from "@/providers/QueryProvider";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "My App",
@@ -17,8 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <QueryProvider>{children}</QueryProvider>
-        <Toaster />
+        <AuthProvider>
+          <QueryProvider>{children}</QueryProvider>
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );

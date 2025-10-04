@@ -7,3 +7,10 @@ export interface ApiResponse<T> {
 export interface ApiError{
    message: string;
 }
+
+export interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}

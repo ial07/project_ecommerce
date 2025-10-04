@@ -6,8 +6,8 @@ import type { UserAuthTypes } from "@/types/Auth.type";
 import type { AxiosError } from "axios";
 import type { ApiError } from "@/types/Api.type";
 import { loginUser } from "@/services/auth.service";
-import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
 
 const useLoginForm = () => {
   const { login } = useAuth();
@@ -29,15 +29,11 @@ const useLoginForm = () => {
   >({
     mutationFn: (data: UserAuthTypes) => loginUser(data.email, data.password),
     onSuccess: (data) => {
-      if (!data.user) {
-        console.error("Login succeeded but user is null");
-        return;
-      }
       if (!data.token) {
         console.error("Login succeeded but token is null");
         return;
       }
-      login(data.user, data.token); // ✅ update state & localStorage
+      login(data.token); // ✅ update state & localStorage
       reset();
 
       router.push("/");

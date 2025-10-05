@@ -17,3 +17,74 @@ export async function getCart(): Promise<Cart> {
     throw error;
   }
 }
+
+// Delete Cart
+export async function deleteCart(): Promise<Cart> {
+  try {
+    const { data } = await api.delete<ApiResponse<Cart>>("/cart");
+    return data.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        (error.response?.data as { message?: string })?.message ||
+          "Failed to delete all carts"
+      );
+    }
+    throw error;
+  }
+}
+
+// Post Cart
+export async function PostCartItems(productId: string, qty:string) {
+ try {
+    const { data } = await api.post<ApiResponse<Cart>>("/cart/items", {
+     productId,
+     qty
+    });
+    return data.data;
+  } catch (error: unknown) {
+if (error instanceof AxiosError) {
+      // Now you’ll actually see backend message
+      throw new Error(
+        (error.response?.data as { message?: string })?.message ||
+          "Cart add failed"
+      );
+    }
+    throw error;
+  }
+}
+
+// Patch Cart
+export async function PatchCartItems(itemId: string, qty:string) {
+ try {
+    const { data } = await api.post<ApiResponse<Cart>>(`/cart/items/${itemId}`, {
+     qty
+    });
+    return data.data;
+  } catch (error: unknown) {
+if (error instanceof AxiosError) {
+      // Now you’ll actually see backend message
+      throw new Error(
+        (error.response?.data as { message?: string })?.message ||
+          "Cart edit qty failed"
+      );
+    }
+    throw error;
+  }
+}
+
+// Delete Cart Items
+export async function deleteCartItems(itemId: string): Promise<Cart> {
+  try {
+    const { data } = await api.delete<ApiResponse<Cart>>(`/cart/items/${itemId}`);
+    return data.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        (error.response?.data as { message?: string })?.message ||
+          "Failed to delete cart by id"
+      );
+    }
+    throw error;
+  }
+}

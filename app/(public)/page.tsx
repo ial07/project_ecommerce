@@ -28,7 +28,7 @@ export default function Home() {
         <span className="inline md:hidden display-xs">Featured Product</span>
         <span className="hidden md:inline display-lg">Featured Product</span>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 mb-4 md:mb-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 my-4 md:my-10">
         {isLoading ? (
           <>
             {Array.from({ length: 4 }).map((_, i) => (
@@ -57,8 +57,9 @@ export default function Home() {
       {page < totalPages && (
         <div className="mb-10 md:mb-25 flex justify-center">
           <Button
-            onClick={() => setLimit((prev) => prev + 4)}
-            className="dark border border-neutral-300 hover:bg-neutral-100 rounded-xl w-40 md:w-55 cursor-pointer"
+            onClick={() => setLimit((prev) => prev + 8)}
+            className="rounded-xl w-40 md:w-55 cursor-pointer"
+            variant={"outline"}
           >
             {isPending ? "Loading" : "Load More"}
           </Button>

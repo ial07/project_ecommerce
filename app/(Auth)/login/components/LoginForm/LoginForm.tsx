@@ -43,7 +43,11 @@ const LoginForm: React.FC = () => {
           />
         </div>
       </div>
-      <Button className="w-full" type="submit" disabled={isPending}>
+      <Button
+        className="w-full cursor-pointer"
+        type="submit"
+        disabled={isPending}
+      >
         {isPending ? "Logging in..." : "Login"}
       </Button>
     </form>

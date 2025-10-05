@@ -27,7 +27,11 @@ const Header: React.FC = () => {
           <div className="hidden md:inline display-xs font-bold">Shirt</div>
         </Link>
         <div className="flex gap-2 md:gap-3 md:w-162">
-          <div className="border border-neutral-300 rounded-xl flex items-center gap-2 p-3">
+          <Link
+            href="/catalog"
+            passHref
+            className="border border-neutral-300 rounded-xl flex items-center gap-2 p-3"
+          >
             <Image
               src="/icons/Category-box.svg"
               alt="logo"
@@ -35,8 +39,8 @@ const Header: React.FC = () => {
               width={10}
               height={10}
             />
-            <span className="hidden md:inline text-sm me-4">Category</span>
-          </div>
+            <span className="hidden md:inline text-sm me-4">Catalog</span>
+          </Link>
           <input
             type="text"
             placeholder="Search"
@@ -52,9 +56,9 @@ const Header: React.FC = () => {
               width={10}
               height={10}
             />
-            {data && data?.items.length > 0 && (
+            {data && data.items && data.items.length > 0 && (
               <div className="w-5 h-5 rounded-full bg-red-500 text-white flex justify-center items-center absolute top-0 right-0">
-                {data?.items.length}
+                {data.items.length}
               </div>
             )}
           </Link>

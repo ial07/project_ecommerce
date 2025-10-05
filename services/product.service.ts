@@ -2,21 +2,22 @@ import { AxiosError } from "axios";
 import api from "./api.service";
 import { ApiResponse } from "@/types/Api.type";
 import { Product, ProductListResponse } from "@/types/Product";
+import { SortType } from "@/types/Sort.type";
 
 export async function getProducts(
   page: number = 1,
   limit: number = 10,
-  categoryId?: string,
-  minPrice?: number,
-  maxPrice?: number,
-  sort: "--" | "newest" | "price" | "rating" | "popular" = "newest",
+  categoryId?: number,
+  minPrice?: number | null,
+  maxPrice?: number | null,
+  sort: SortType = "newest",
   order: "asc" | "desc" = "desc"
 ): Promise<ProductListResponse> {
   try {
-    const params: Record<string, string | number> = { page, limit, sort, order };
+    const params: Record<string, string | number|undefined> = { page, limit, sort, order };
     if (categoryId) params.categoryId = categoryId;
-    if (minPrice !== undefined) params.minPrice = minPrice;
-    if (maxPrice !== undefined) params.maxPrice = maxPrice;
+    if (minPrice !== null) params.minPrice = minPrice;
+    if (maxPrice !== null) params.maxPrice = maxPrice;
 
     const { data } = await api.get<ApiResponse<ProductListResponse>>("/products", {
       params,

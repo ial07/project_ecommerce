@@ -4,27 +4,27 @@ import type { NextRequest } from "next/server";
 import type { ApiResponse, ApiError } from "@/types/Api.type";
 import type { Cart } from "@/types/Cart.type";
 
-export async function GET(req: NextRequest) {
+// ✅ PATCH /api/cart/items/:itemId
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { itemId: string } }
+) {
   try {
-    // ✅ Ambil token dari header request (frontend -> Next API)
     const authHeader = req.headers.get("authorization");
-    
+    const body = await req.json(); // { qty }
 
-    const { data } = await apiClient.get<ApiResponse<Cart>>("/cart", {
-      headers: {
-        Authorization: authHeader || "",
-      },
-    });
+    const { data } = await apiClient.patch<ApiResponse<Cart>>(
+      `/cart/items/${params.itemId}`,
+      body,
+      {
+        headers: { Authorization: authHeader || "" },
+      }
+    );
 
     return NextResponse.json<ApiResponse<Cart>>(data, { status: 200 });
   } catch (error: unknown) {
     let message = "Something went wrong";
-
-    if (
-      typeof error === "object" &&
-      error !== null &&
-      "response" in error
-    ) {
+    if (typeof error === "object" && error !== null && "response" in error) {
       const axiosError = error as {
         response?: { data?: { message?: string } };
       };
@@ -32,21 +32,24 @@ export async function GET(req: NextRequest) {
     } else if (error instanceof Error) {
       message = error.message;
     }
-
-    const err: ApiError = { message };
-    return NextResponse.json(err, { status: 400 });
+    return NextResponse.json<ApiError>({ message }, { status: 400 });
   }
 }
 
-
-// ✅ DELETE /api/cart (hapus semua cart items)
-export async function DELETE(req: NextRequest) {
+// ✅ DELETE /api/cart/items/:itemId
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { itemId: string } }
+) {
   try {
     const authHeader = req.headers.get("authorization");
 
-    const { data } = await apiClient.delete<ApiResponse<Cart>>("/cart", {
-      headers: { Authorization: authHeader || "" },
-    });
+    const { data } = await apiClient.delete<ApiResponse<Cart>>(
+      `/cart/items/${params.itemId}`,
+      {
+        headers: { Authorization: authHeader || "" },
+      }
+    );
 
     return NextResponse.json<ApiResponse<Cart>>(data, { status: 200 });
   } catch (error: unknown) {

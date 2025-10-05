@@ -24,11 +24,11 @@ const Product: React.FC<ProductProps> = ({
 }) => {
   return (
     <div className="card bg-white shadow-md rounded-xl cursor-pointer">
-      <div className="h-43 md:h-71 w-full relative">
+      <div className="h-43 md:h-60 w-full relative">
         <Image
           src={productImg}
           alt="product"
-          className="h-full w-full bg-cover"
+          className="h-full w-full object-cover"
           width={300}
           height={300}
           unoptimized
@@ -39,11 +39,7 @@ const Product: React.FC<ProductProps> = ({
           {title}
         </p>
         <p className="text-sm md:text-md font-bold mb-2">
-          {new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-            maximumFractionDigits: 0,
-          }).format(price ?? 0)}
+          Rp{price?.toLocaleString("id-ID")}
         </p>
 
         <div className="text-sm flex items-center gap-1 mb-2">
@@ -55,7 +51,7 @@ const Product: React.FC<ProductProps> = ({
             height={20}
           />
           {rating == 0 ? (
-            "No rating yet"
+            <span className="text-sm text-neutral-600">No rating yet</span>
           ) : (
             <>
               <span>{rating} - </span>

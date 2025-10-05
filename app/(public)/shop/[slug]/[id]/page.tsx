@@ -3,7 +3,7 @@
 import Product from "@/app/(public)/components/Product";
 import { Product as ProductType } from "@/types/Product";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useShopBySlug } from "@/hooks/useShopBySlug";
+import { useShopBySlug } from "@/hooks/useShop";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -57,6 +57,13 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ params }) => {
           </div>
           <span className="text-xs md:text-md">Reviews dan Rating</span>
         </div>
+      </div>
+
+      <div className="w-full">
+        <h1 className="font-bold mb-6">
+          <span className="inline md:hidden display-xs">Products</span>
+          <span className="hidden md:inline display-md">Products</span>
+        </h1>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 mb-4 md:mb-10">

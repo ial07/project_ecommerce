@@ -10,7 +10,9 @@ export interface CartItem {
 }
 
 export interface Cart {
+  id?:number;
+  productId?:number;
   cartId: number;
-  items: CartItem[];
-  grandTotal: number;
+  items?: CartItem[];
+  grandTotal?: number;
 }

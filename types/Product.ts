@@ -1,5 +1,5 @@
 import { Pagination } from "./Api.type";
-import { Category } from "./Categpry.type";
+import { Category } from "./Category.type";
 import { Shop } from "./Shop.type";
 
 export interface Product {

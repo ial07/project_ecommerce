@@ -1,10 +1,63 @@
-import { useQuery } from "@tanstack/react-query";
-import { getCart } from "@/services/cart.service";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { 
+  getCart, 
+  deleteCart, 
+  PostCartItems, 
+  PatchCartItems, 
+  deleteCartItems 
+} from "@/services/cart.service";
 import { Cart } from "@/types/Cart.type";
 
+// ✅ Get Cart
 export function useCart() {
   return useQuery<Cart, Error>({
     queryKey: ["cart"],
     queryFn: getCart,
+  });
+}
+
+// ✅ Delete All Cart Items
+export function useDeleteCart() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+  });
+}
+
+// ✅ Add Item to Cart
+export function useAddCartItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ productId, qty }: { productId: string; qty: string }) =>
+      PostCartItems(productId, qty),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+  });
+}
+
+// ✅ Update Cart Item Quantity
+export function useUpdateCartItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ itemId, qty }: { itemId: string; qty: string }) =>
+      PatchCartItems(itemId, qty),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+  });
+}
+
+// ✅ Delete Item from Cart
+export function useDeleteCartItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (itemId: string) => deleteCartItems(itemId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
   });
 }

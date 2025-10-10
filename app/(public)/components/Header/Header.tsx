@@ -51,7 +51,7 @@ const Header: React.FC = () => {
             <Search className="absolute text-neutral-500 top-2 left-3 w-5" />
           </div>
         </div>
-        {!isLoading && (
+        {!isLoading && user && (
           <Link href="/cart" className="relative py-3 pr-2" passHref>
             <Image
               src="/icons/Shopping-cart.svg"

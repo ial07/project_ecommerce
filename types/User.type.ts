@@ -1,3 +1,4 @@
+import { Shop } from "./Shop.type";
 import { Stats } from "./Stat.type";
 
 export type User = {
@@ -8,6 +9,6 @@ export type User = {
   phone?:string;
   createdAt?:string;
   updatedAt?:string;
-  shop?:object;
+  shop?:Shop;
   stats?:Stats;
 }

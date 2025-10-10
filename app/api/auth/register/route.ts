@@ -7,14 +7,16 @@ import type { NextRequest } from "next/server";
 
 
 export async function POST(req: NextRequest) {
+ 
   try {
     const body = await req.json();
-    const { name, email, password } = body;
+    const { name, email, password, avatarUrl } = body;
 
     const { data } = await apiClient.post<ApiResponse<User>>("/auth/register", {
       name,
       email,
       password,
+      avatarUrl
     });
 
     return NextResponse.json<ApiResponse<User>>(data);

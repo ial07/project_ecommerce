@@ -7,7 +7,15 @@ export interface Shop {
   slug?: string;
   logo?: string | null;
   address?:string;
-  isActive?:boolean
+  isActive?:boolean;
+  createdAt:string;
+  _count: {
+    products?:number;
+    orderItems?:number;
+    totalOrders?:number;
+    completedItems?:number;
+    hasShop:boolean
+   }
 }
 
 export interface ShopProductsResponse {

@@ -35,7 +35,7 @@ export async function deleteCart(): Promise<Cart> {
 }
 
 // Post Cart
-export async function PostCartItems(productId: string, qty:string) {
+export async function PostCartItems(productId: number, qty:number) {
  try {
     const { data } = await api.post<ApiResponse<Cart>>("/cart/items", {
      productId,
@@ -55,9 +55,9 @@ if (error instanceof AxiosError) {
 }
 
 // Patch Cart
-export async function PatchCartItems(itemId: string, qty:string) {
+export async function PatchCartItems(itemId: number, qty:number) {
  try {
-    const { data } = await api.post<ApiResponse<Cart>>(`/cart/items/${itemId}`, {
+    const { data } = await api.patch<ApiResponse<Cart>>(`/cart/items/${itemId}`, {
      qty
     });
     return data.data;
@@ -74,7 +74,7 @@ if (error instanceof AxiosError) {
 }
 
 // Delete Cart Items
-export async function deleteCartItems(itemId: string): Promise<Cart> {
+export async function deleteCartItems(itemId: number): Promise<Cart> {
   try {
     const { data } = await api.delete<ApiResponse<Cart>>(`/cart/items/${itemId}`);
     return data.data;

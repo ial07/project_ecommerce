@@ -1,6 +1,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { getValidImage } from "@/lib/getValidImage";
 import { useAuth } from "@/providers/AuthProvider";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const BtnProtected = () => {
@@ -16,16 +18,35 @@ const BtnProtected = () => {
       ) : (
         user != null && (
           <div className="grid grid-cols-2 md:flex items-center gap-3">
-            <div className="rounded-full border py-2 px-3 flex items-center gap-2 cursor-pointer hover:bg-neutral-50">
-              <div className="relative w-5 h-5">
-                <Image src="/icons/Store.svg" fill alt="Store" />
-              </div>
-              <span className="text-sm font-bold">Open Store</span>
-            </div>
-            <div className="rounded-full border py-2 px-3 flex items-center gap-2 cursor-pointer hover:bg-neutral-50">
+            <Link
+              href={user.shop ? "/seller/dashboard" : `/open-store`}
+              passHref
+              className="rounded-full border py-2 px-3 flex items-center gap-2 cursor-pointer hover:bg-neutral-50"
+            >
               <div className="relative w-5 h-5">
                 <Image
-                  src={user.avatarUrl}
+                  src={
+                    user.shop
+                      ? getValidImage(user.shop.logo!)
+                      : `/icons/Store.svg`
+                  }
+                  fill
+                  alt="Store"
+                  unoptimized
+                />
+              </div>
+              <span className="text-sm font-bold">
+                {user.shop ? user.shop.name : "Open Store"}
+              </span>
+            </Link>
+            <Link
+              href="/order"
+              passHref
+              className="rounded-full border py-2 px-3 flex items-center gap-2 cursor-pointer hover:bg-neutral-50"
+            >
+              <div className="relative w-5 h-5">
+                <Image
+                  src={getValidImage(user.avatarUrl)}
                   fill
                   alt="Store"
                   unoptimized
@@ -33,7 +54,7 @@ const BtnProtected = () => {
                 />
               </div>
               <span className="text-sm font-bold">{user.name}</span>
-            </div>
+            </Link>
           </div>
         )
       )}

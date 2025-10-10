@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { getValidImage } from "@/lib/getValidImage";
 import { Shop } from "@/types/Shop.type";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,8 +14,8 @@ const ProductStore: React.FC<ProductStoreProp> = ({ productShop }) => {
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-4">
         <Image
-          src={productShop.logo || "/icons/Store.svg"}
-          alt={productShop.logo || "/icons/Store.svg"}
+          src={getValidImage(productShop.logo!) || "/icons/Store.svg"}
+          alt={getValidImage(productShop.logo!) || "/icons/Store.svg"}
           width={50}
           height={50}
           className="object-cover rounded-full"

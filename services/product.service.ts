@@ -3,6 +3,7 @@ import api from "./api.service";
 import { ApiResponse } from "@/types/Api.type";
 import { Product, ProductListResponse } from "@/types/Product";
 import { SortType } from "@/types/Sort.type";
+import { ShopProductsResponse } from "@/types/Shop.type";
 
 export async function getProducts(
   page: number = 1,
@@ -40,6 +41,29 @@ export async function getProducts(
 export async function getProductById(id: number): Promise<Product> {
   try {
     const { data } = await api.get<ApiResponse<Product>>(`/products/${id}`);
+    return data.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        (error.response?.data as { message?: string })?.message ||
+          "Failed to fetch product"
+      );
+    }
+    throw error;
+  }
+}
+
+export async function getShopProductBySlug(
+    page: number = 1,
+    limit: number = 10,
+    slug: string
+): Promise<ShopProductsResponse> {
+  try {
+    
+    const params: Record<string, string | number> = { page, limit };
+    const { data } = await api.get<ApiResponse<ShopProductsResponse>>(`/stores/slug/${slug}`, {
+      params,
+    });
     return data.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {

@@ -3,11 +3,11 @@
 import Product from "@/app/(public)/components/Product";
 import { Product as ProductType } from "@/types/Product";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useShopBySlug } from "@/hooks/useShop";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useShopBySlug } from "@/hooks/useProducts";
 
 interface ShopDetailProps {
   params: Promise<{ slug: string; id: number }>;

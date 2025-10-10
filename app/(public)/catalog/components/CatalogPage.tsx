@@ -105,8 +105,6 @@ const CatalogPage: React.FC = () => {
             <span className="hidden md:inline display-md">Catalog</span>
           </h1>
 
-          <p>Min Price: {minPrice}</p>
-          <p>Max Price: {maxPrice}</p>
           <div className="flex items-start gap-6">
             <div className="hidden md:inline">
               <FilterList

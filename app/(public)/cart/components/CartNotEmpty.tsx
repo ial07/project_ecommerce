@@ -1,35 +1,54 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useDeleteCartItem } from "@/hooks/useCart";
+import { useDeleteCartItem, useUpdateCartItem } from "@/hooks/useCart";
 import CartItem from "./CartItem";
 import { Cart } from "@/types/Cart.type";
+import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 type CartNotEmptyProp = {
   cartData: Cart;
 };
 
 const CartNotEmpty: React.FC<CartNotEmptyProp> = ({ cartData }) => {
-  const deleteCartItem = useDeleteCartItem();
+  const [selected, setSelected] = useState<number[]>([]); // ✅ store selected itemIds
 
-  const [selected, setSelected] = useState<number[]>([]);
+  const updateCartMutation = useUpdateCartItem();
+  const deleteCartItemMutation = useDeleteCartItem();
+  const queryClient = useQueryClient();
 
-  const handleCheck = (id: number, checked: boolean) => {
+  // ✅ handle single item checkbox
+  const handleCheck = (itemId: number, checked: boolean) => {
     setSelected((prev) =>
-      checked ? [...prev, id] : prev.filter((x) => x !== id)
+      checked ? [...prev, itemId] : prev.filter((x) => x !== itemId)
     );
   };
 
+  // ✅ handle select all
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      if (cartData && cartData.items)
-        setSelected(cartData?.items.map((item) => item.id));
+      const allIds =
+        cartData?.groups?.flatMap((g) => g.items.map((it) => it.id)) ?? [];
+      setSelected(allIds);
     } else {
       setSelected([]);
     }
   };
 
-  const totalItems = cartData?.items?.length ?? 0;
+  // ✅ handle quantity change
+  const handleQuantityChange = (itemId: number, qty: number) => {
+    updateCartMutation.mutate(
+      { itemId: itemId, qty },
+      {
+        onError: () => {
+          queryClient.invalidateQueries({ queryKey: ["cart"] });
+        },
+      }
+    );
+  };
+
+  const totalItems = cartData?.groups?.flatMap((g) => g.items).length ?? 0;
 
   const allSelected = totalItems > 0 && selected.length === totalItems;
   const isIndeterminate = selected.length > 0 && selected.length < totalItems;
@@ -53,19 +72,23 @@ const CartNotEmpty: React.FC<CartNotEmptyProp> = ({ cartData }) => {
             <h3 className="text-sm md:text-md">Select All</h3>
           </div>
 
-          {cartData?.items?.map((c, i) => (
+          {cartData?.groups?.map((group, i) => (
             <CartItem
-              storeName="The Store"
-              productName={c.product.title}
-              productCategory="Shoes"
-              productImage={c.product.images[0]}
-              price={c.priceSnapshot}
-              productQty={c.qty}
-              checked={selected.includes(c.id)}
-              onCheck={(val) => handleCheck(c.id, val)}
-              onRemove={() => console.log("Removed item")}
-              onQuantityChange={(qty) => console.log("Quantity changed:", qty)}
-              key={i}
+              key={group.shop.id}
+              storeName={group.shop.name}
+              CartItems={group.items}
+              checkedItems={selected} // ✅ pass array of checked
+              onCheck={handleCheck}
+              onRemove={(itemId) => {
+                if (confirm("Are you sure you want to remove this item?")) {
+                  deleteCartItemMutation.mutate(itemId, {
+                    onError: (err) => {
+                      console.error("Delete failed:", err);
+                    },
+                  });
+                }
+              }}
+              onQuantityChange={handleQuantityChange}
             />
           ))}
         </div>
@@ -78,9 +101,12 @@ const CartNotEmpty: React.FC<CartNotEmptyProp> = ({ cartData }) => {
               Rp{cartData?.grandTotal?.toLocaleString("id-ID")}
             </span>
           </div>
-          <Button className="w-full" size={"sm"}>
-            Checkout
-          </Button>
+
+          <Link href="/checkout" passHref>
+            <Button className="w-full cursor-pointer" size={"sm"}>
+              Checkout
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

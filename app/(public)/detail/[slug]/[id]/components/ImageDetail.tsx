@@ -1,3 +1,4 @@
+import { getValidImage } from "@/lib/getValidImage";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -12,7 +13,7 @@ const ImageDetail: React.FC<ImageDetailProps> = ({ images }) => {
       {/* Main Image */}
       <div className="relative w-full aspect-square mb-4">
         <Image
-          src={images[imgCount]}
+          src={getValidImage(images[imgCount])}
           alt={`Product image ${imgCount + 1}`}
           fill
           className="object-cover rounded-xl"
@@ -31,7 +32,7 @@ const ImageDetail: React.FC<ImageDetailProps> = ({ images }) => {
             }`}
           >
             <Image
-              src={img}
+              src={getValidImage(img)}
               alt={`${img} thumbnail ${i + 1}`}
               fill
               className="object-cover rounded-xl p-1"

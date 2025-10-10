@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useProductById, useProducts } from "@/hooks/useProducts";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -11,6 +11,9 @@ import Link from "next/link";
 import ProductStore from "./ProductStore";
 import QuantityCount from "@/app/(public)/components/QuantityCount";
 import Product from "@/app/(public)/components/Product";
+import { useAddCartItem } from "@/hooks/useCart";
+import { toast } from "sonner";
+import { getValidImage } from "@/lib/getValidImage";
 
 interface ProductDetailProps {
   productId: number;
@@ -19,8 +22,25 @@ interface ProductDetailProps {
 
 const ProductDetail: React.FC<ProductDetailProps> = ({ productId, slug }) => {
   const { data: product, isLoading } = useProductById(productId);
+  const [quantityCount, setQuantityCount] = useState<number>(1);
   const { data: productList, isLoading: isLoadingProducts } = useProducts(1, 4);
   const products = productList?.products ?? [];
+
+  const addCartMutation = useAddCartItem();
+
+  const handleAdd = () => {
+    addCartMutation.mutate(
+      { productId, qty: quantityCount }, // 👈 pass productId + qty
+      {
+        onSuccess: (e) => {
+          toast.success("Added to cart");
+        },
+        onError: (err) => {
+          console.error("❌ Failed to add to cart:", err);
+        },
+      }
+    );
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (!product) return notFound();
@@ -42,16 +62,17 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId, slug }) => {
       <div className="flex flex-col md:flex-row md:gap-7">
         {/* Left: Images */}
         <Image
-          src={product.images[0]}
+          src={getValidImage(product.images[0])}
           alt={product.title}
           width={400}
           height={400}
           className="rounded"
+          unoptimized
         />
 
         {/* Right: Info */}
         <div className="py-4 md:pb-5 w-full">
-          <h3 className="text-md md:text-xl text-ellipsis">{product.title}</h3>
+          <h3 className="text-md md:text-xl text-ellipsis">{product?.title}</h3>
           <div className="py-2 font-bold text-xl">
             Rp{product.price.toLocaleString("id-ID")}
           </div>
@@ -62,6 +83,9 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId, slug }) => {
           </div>
 
           <hr className="border border-neutral-300 my-4" />
+          <h4 className="text-md md:text-lg font-bold mb-1">Deskripsi</h4>
+          <p className="text-sm md:text-md">{product?.description}</p>
+          <hr className="border border-neutral-300 my-4" />
 
           <ProductStore productShop={product.shop} />
 
@@ -69,12 +93,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId, slug }) => {
 
           <div className="flex items-center gap-4 mb-4">
             <span className="text-sm md:text-md">Quantity</span>
-            <QuantityCount />
+            <QuantityCount initial={1} onChange={setQuantityCount} />
           </div>
 
-          <Button className="w-full md:w-80">
+          <Button className="w-full md:w-80 cursor-pointer" onClick={handleAdd}>
             <Plus />
-            <span>Add to Cart</span>
+            <span>
+              {addCartMutation.isPending ? "Adding..." : "Add to Cart"}
+            </span>
           </Button>
         </div>
       </div>

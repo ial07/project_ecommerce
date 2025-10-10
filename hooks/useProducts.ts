@@ -1,6 +1,7 @@
-import { getProductById, getProducts } from "@/services/product.service";
+import { getProductById, getProducts, getShopProductBySlug } from "@/services/product.service";
 import { Product, ProductListResponse } from "@/types/Product";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { ShopProductsResponse } from "@/types/Shop.type";
 
 export function useProducts(
   page: number = 1,
@@ -24,5 +25,17 @@ export function useProductById(id: number) {
     queryKey: ["product", id], // unique cache key
     queryFn: () => getProductById(id),
     enabled: !!id, // only run if id is not empty
+  });
+}
+
+export function useShopBySlug(
+  page: number = 1,
+  limit: number = 10,
+  slug: string,
+) {
+  return useQuery<ShopProductsResponse, Error>({
+    queryKey: ["Shop", page, limit, slug],
+    queryFn: () => getShopProductBySlug(page, limit, slug),
+    placeholderData: keepPreviousData,
   });
 }

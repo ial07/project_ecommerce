@@ -7,6 +7,7 @@ import BtnProtected from "./components/BtnProtected";
 import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
 import { useCart } from "@/hooks/useCart";
+import { Search, X } from "lucide-react";
 
 const Header: React.FC = () => {
   const { user } = useAuth();
@@ -41,11 +42,14 @@ const Header: React.FC = () => {
             />
             <span className="hidden md:inline text-sm me-4">Catalog</span>
           </Link>
-          <input
-            type="text"
-            placeholder="Search"
-            className="border border-neutral-300 py-2 px-4 rounded-xl mr-2 w-full"
-          />
+          <div className="relative mr-2 w-full">
+            <input
+              type="text"
+              placeholder="Search"
+              className="border border-neutral-300 py-2 px-10 rounded-xl w-full"
+            />
+            <Search className="absolute text-neutral-500 top-2 left-3 w-5" />
+          </div>
         </div>
         {!isLoading && (
           <Link href="/cart" className="relative py-3 pr-2" passHref>
@@ -89,12 +93,7 @@ const Header: React.FC = () => {
             <div className="flex justify-between items-center px-4 h-16 mb-4 shadow-sm">
               <span className="text-lg font-bold">Menu</span>
               <div onClick={() => setIsOpen(false)} aria-label="Close menu">
-                <Image
-                  src="/icons/close.svg"
-                  alt="close"
-                  width={20}
-                  height={20}
-                />
+                <X width={20} height={20} />
               </div>
             </div>
 

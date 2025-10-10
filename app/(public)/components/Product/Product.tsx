@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { getValidImage } from "@/lib/getValidImage";
 
 type ProductProps = {
   title?: string;
@@ -26,7 +27,7 @@ const Product: React.FC<ProductProps> = ({
     <div className="card bg-white shadow-md rounded-xl cursor-pointer">
       <div className="h-43 md:h-60 w-full relative">
         <Image
-          src={productImg}
+          src={getValidImage(productImg)}
           alt="product"
           className="h-full w-full object-cover"
           width={300}
@@ -71,7 +72,7 @@ const Product: React.FC<ProductProps> = ({
                 height={20}
               />
             )}
-            <span>{MarketName}</span>
+            <span className="text-ellipsis line-clamp-1">{MarketName}</span>
           </div>
         )}
       </div>

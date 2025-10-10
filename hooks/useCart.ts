@@ -31,10 +31,14 @@ export function useDeleteCart() {
 export function useAddCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ productId, qty }: { productId: string; qty: string }) =>
+    mutationFn: ({ productId, qty }: { productId: number; qty: number }) =>
       PostCartItems(productId, qty),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+     onError: (error: unknown) => {
+      console.error("Failed to update cart:", error);
+      // ⚡ optionally show toast message
     },
   });
 }
@@ -43,7 +47,7 @@ export function useAddCartItem() {
 export function useUpdateCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ itemId, qty }: { itemId: string; qty: string }) =>
+    mutationFn: ({ itemId, qty }: { itemId: number; qty: number }) =>
       PatchCartItems(itemId, qty),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
@@ -55,7 +59,7 @@ export function useUpdateCartItem() {
 export function useDeleteCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (itemId: string) => deleteCartItems(itemId),
+    mutationFn: (itemId: number) => deleteCartItems(itemId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },

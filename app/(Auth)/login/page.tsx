@@ -28,7 +28,6 @@ const Login = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Login Form */}
           <LoginForm />
         </CardContent>
         <CardFooter className="flex-col gap-2">

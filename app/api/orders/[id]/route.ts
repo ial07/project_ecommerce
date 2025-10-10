@@ -6,11 +6,11 @@ import type { Order } from "@/types/Order.type";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+   context: { params: Promise<{ id: string }> }
 ) {
   try {
     const authHeader = req.headers.get("authorization");
-    const { id } = params;
+    const { id } = await context.params;
 
     const { data } = await apiClient.get<ApiResponse<Order>>(`/orders/${id}`, {
       headers: { Authorization: authHeader || "" },

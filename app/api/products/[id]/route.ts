@@ -5,11 +5,14 @@ import { ApiError } from "@/types/Api.type";
 
 export async function GET(
   req: NextRequest,
-   context: { params: Promise<{ id: number }> }
+   context: { params: Promise<{ id: string  }> }
 ) {
   try {
-    const { id } = await context.params;;
-    const { data } = await apiClient.get(`/products/${id}`);
+    const { id } = await context.params;
+    const authHeader = req.headers.get("authorization");
+    const { data } = await apiClient.get(`/products/${id}`,{
+      headers: { Authorization: authHeader || "" },
+    });
     return NextResponse.json(data);
   } catch (error: unknown) {
     let message = "Something went wrong";

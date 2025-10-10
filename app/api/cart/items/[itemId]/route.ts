@@ -7,14 +7,15 @@ import type { Cart } from "@/types/Cart.type";
 // ✅ PATCH /api/cart/items/:itemId
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { itemId: string } }
+    context: { params: Promise<{ itemId: string }> }
 ) {
+  const { itemId } = await context.params;
   try {
     const authHeader = req.headers.get("authorization");
     const body = await req.json(); // { qty }
 
     const { data } = await apiClient.patch<ApiResponse<Cart>>(
-      `/cart/items/${params.itemId}`,
+      `/cart/items/${itemId}`,
       body,
       {
         headers: { Authorization: authHeader || "" },
@@ -39,13 +40,14 @@ export async function PATCH(
 // ✅ DELETE /api/cart/items/:itemId
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { itemId: string } }
+context: { params: Promise<{ itemId: string }> }
 ) {
   try {
     const authHeader = req.headers.get("authorization");
+    const { itemId } = await context.params;
 
     const { data } = await apiClient.delete<ApiResponse<Cart>>(
-      `/cart/items/${params.itemId}`,
+      `/cart/items/${itemId}`,
       {
         headers: { Authorization: authHeader || "" },
       }

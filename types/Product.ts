@@ -17,6 +17,8 @@ export interface Product {
   category: Category;
   shopId: number;
   shop: Shop;
+  createdAt?:string;
+  updatedAt?:string;
 }
 
 export interface ProductListResponse {

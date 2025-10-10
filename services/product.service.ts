@@ -75,3 +75,51 @@ export async function getShopProductBySlug(
     throw error;
   }
 }
+
+
+// Get Seller Products
+export async function getSellerProducts(
+  page: number = 1,
+  limit: number = 10,
+  isActive?: boolean,
+  q?:string,
+): Promise<ProductListResponse> {
+  try {
+    
+    const params: Record<string, string | number| boolean> = { page, limit };
+    if(isActive) params.isActive = isActive;
+    if(q) params.q = q;
+
+    const { data } = await api.get<ApiResponse<ProductListResponse>>(`/seller/products`, {
+      params,
+    });
+    return data.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        (error.response?.data as { message?: string })?.message ||
+          "Failed to fetch products seller"
+      );
+    }
+    throw error;
+  }
+}
+
+  // Post Seller Products
+  export async function postSellerProducts(
+    formData: FormData
+  ): Promise<Product> {
+    try {
+      const { data } = await api.post<ApiResponse<Product>>("/seller/products", formData);
+      
+      return data.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        throw new Error(
+          (error.response?.data as { message?: string })?.message ||
+            "Product add failed"
+        );
+      }
+      throw error;
+    }
+  }

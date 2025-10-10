@@ -13,6 +13,7 @@ export interface Shop {
     products?:number;
     orderItems?:number;
     totalOrders?:number;
+    totalRevenue?:number;
     completedItems?:number;
     hasShop:boolean
    }

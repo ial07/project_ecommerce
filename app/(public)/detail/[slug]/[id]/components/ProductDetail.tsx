@@ -66,7 +66,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId, slug }) => {
           alt={product.title}
           width={400}
           height={400}
-          className="rounded"
+          className="rounded object-cover"
           unoptimized
         />
 

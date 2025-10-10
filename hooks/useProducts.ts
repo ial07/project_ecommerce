@@ -1,6 +1,6 @@
-import { getProductById, getProducts, getShopProductBySlug } from "@/services/product.service";
+import { getProductById, getProducts, getSellerProducts, getShopProductBySlug, postSellerProducts } from "@/services/product.service";
 import { Product, ProductListResponse } from "@/types/Product";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ShopProductsResponse } from "@/types/Shop.type";
 
 export function useProducts(
@@ -37,5 +37,34 @@ export function useShopBySlug(
     queryKey: ["Shop", page, limit, slug],
     queryFn: () => getShopProductBySlug(page, limit, slug),
     placeholderData: keepPreviousData,
+  });
+}
+
+
+export function useSellerProducts(
+  page: number = 1,
+  limit: number = 10,
+  isActive?: boolean,
+  q?: string,
+) {
+  return useQuery<ProductListResponse, Error>({
+    queryKey: ["sellerProducts", page, limit, isActive, q],
+    queryFn: () => getSellerProducts(page, limit, isActive, q),
+    placeholderData: keepPreviousData,
+  });
+}
+
+
+ export function usePostSeller() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (formData: FormData) => postSellerProducts(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sellerProducts"] });
+    },
+    onError: (error: unknown) => {
+      console.error("Failed to post seller product:", error);
+    },
   });
 }

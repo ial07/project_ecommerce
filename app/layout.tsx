@@ -20,7 +20,7 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <AuthProvider>
           <QueryProvider>{children}</QueryProvider>
-          <Toaster />
+          <Toaster richColors />
         </AuthProvider>
       </body>
     </html>

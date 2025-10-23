@@ -13,16 +13,16 @@ const OpenStoreForm: React.FC = () => {
     handleSubmit,
     onSubmit,
     errors,
+    error,
     isPending,
     isError,
-    errorMessage,
   } = useOpenStoreForm();
 
   useEffect(() => {
-    if (isError && errorMessage) {
-      toast.error(errorMessage);
+    if (isError && error) {
+      toast.error(error.message);
     }
-  }, [isError, errorMessage]);
+  }, [isError, error]);
 
   return (
     <form className="w-full" onSubmit={handleSubmit(onSubmit)}>

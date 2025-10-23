@@ -23,7 +23,7 @@ export async function PostSellerActivate(
   name: string, 
   slug:string, 
   address?:string,
-  logo:string = "https://img.freepik.com/premium-vector/shop-store-icon-vector-logo-template_917138-2081.jpg"
+  logo:string | null = "https://img.freepik.com/premium-vector/shop-store-icon-vector-logo-template_917138-2081.jpg"
 ) {
  try {
     const { data } = await api.post<ApiResponse<Shop>>("/seller/activate", {
@@ -31,15 +31,16 @@ export async function PostSellerActivate(
      slug,
      address,
      logo
-    });
+    });    
+    
     return data.data;
   } catch (error: unknown) {
-if (error instanceof AxiosError) {
-      // Now you’ll actually see backend message
+    
+    if (error instanceof AxiosError) {
       
       throw new Error(
         (error.response?.data as { message?: string })?.message ||
-          "Seller add failed"
+          "Seller activate failed"
       );
     }
     throw error;

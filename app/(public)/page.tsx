@@ -35,7 +35,7 @@ export default function Home() {
               <Skeleton key={i} className="h-100 w-full rounded-lg" />
             ))}
           </>
-        ) : (
+        ) : products.length > 0 ? (
           products.map((p: ProductType) => (
             <Link key={p.id} href={`/detail/${p.slug}/${p.id}`} passHref>
               <Product
@@ -50,6 +50,8 @@ export default function Home() {
               />
             </Link>
           ))
+        ) : (
+          <div>No Products Yet</div>
         )}
       </div>
 

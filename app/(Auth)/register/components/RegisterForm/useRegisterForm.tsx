@@ -8,8 +8,10 @@ import {
 import type { AxiosError } from "axios";
 import type { ApiError } from "@/types/Api.type";
 import { registerUser } from "@/services/auth.service";
+import { useRouter } from "next/navigation";
 
 const useRegisterForm = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -26,6 +28,7 @@ const useRegisterForm = () => {
   >({
     mutationFn: (data) => registerUser(data.name, data.email, data.password),
     onSuccess: () => {
+      router.push("/login");
       reset();
     },
   });

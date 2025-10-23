@@ -7,4 +7,4 @@ export const openStoreSchema = z.object({
   address: z.string().min(3, "Address must be at least 3 characters"),
 });
 
-export type TopenStoreSchema = z.infer<typeof openStoreSchema>;
+export type TOpenStoreSchema = z.infer<typeof openStoreSchema>;

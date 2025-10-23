@@ -1,16 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import type { AxiosError } from "axios";
+import type { ApiError } from "@/types/Api.type";
 import { useRouter } from "next/navigation";
+import {
+  openStoreSchema,
+  TOpenStoreSchema,
+} from "@/lib/validation/seller.validation";
+import { PostSellerActivate } from "@/services/seller.service";
 import { OpenStoreTypes } from "@/types/Seller.type";
-import { openStoreSchema } from "@/lib/validation/seller.validation";
-import { usePostSellerActivate } from "@/hooks/useSeller";
-import { AxiosError } from "axios";
-import { ApiError } from "@/types/Api.type";
 
-const useOpenStoreForm = () => {
+const useOpenStore = () => {
   const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -20,32 +22,22 @@ const useOpenStoreForm = () => {
     resolver: zodResolver(openStoreSchema),
   });
 
-  const {
-    mutate: activateSeller,
-    isPending,
-    isError,
-    error,
-  } = usePostSellerActivate();
+  const { mutate, isPending, isError, error } = useMutation<
+    Awaited<ReturnType<typeof PostSellerActivate>>,
+    AxiosError<ApiError>,
+    OpenStoreTypes
+  >({
+    mutationFn: (data: OpenStoreTypes) =>
+      PostSellerActivate(data.name, data.slug, data.address),
+    onSuccess: () => {
+      router.push("/");
+      reset();
+    },
+  });
 
-  const onSubmit = (data: OpenStoreTypes) => {
-    activateSeller(
-      {
-        name: data.name,
-        slug: data.slug,
-        address: data.address,
-        logo: data.logo,
-      },
-      {
-        onSuccess: () => {
-          reset();
-          router.push("/");
-        },
-      }
-    );
+  const onSubmit = (data: TOpenStoreSchema) => {
+    mutate(data);
   };
-
-  // ✅ Extract readable message
-  const errorMessage = (error as AxiosError<ApiError>)?.response?.data?.message;
 
   return {
     register,
@@ -55,8 +47,8 @@ const useOpenStoreForm = () => {
     onSubmit,
     isPending,
     isError,
-    errorMessage, // ✅ clean and safe to render
+    error,
   };
 };
 
-export default useOpenStoreForm;
+export default useOpenStore;

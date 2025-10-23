@@ -32,8 +32,6 @@ const useSellerProductForm = () => {
   });
 
   const onSubmit: SubmitHandler<z.input<typeof productSchema>> = (data) => {
-    console.log("✅ Form validated data:", data);
-
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description || "");

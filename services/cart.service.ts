@@ -1,11 +1,11 @@
-import api from "./api.service";
 import { ApiResponse } from "@/types/Api.type";
 import { Cart } from "@/types/Cart.type";
 import { AxiosError } from "axios";
+import apiClient from "./apiClient.service";
 
 export async function getCart(): Promise<Cart> {
   try {
-    const { data } = await api.get<ApiResponse<Cart>>("/cart");
+    const { data } = await apiClient.get<ApiResponse<Cart>>("/cart");
     return data.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
@@ -21,7 +21,7 @@ export async function getCart(): Promise<Cart> {
 // Delete Cart
 export async function deleteCart(): Promise<Cart> {
   try {
-    const { data } = await api.delete<ApiResponse<Cart>>("/cart");
+    const { data } = await apiClient.delete<ApiResponse<Cart>>("/cart");
     return data.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
@@ -37,7 +37,7 @@ export async function deleteCart(): Promise<Cart> {
 // Post Cart
 export async function PostCartItems(productId: number, qty:number) {
  try {
-    const { data } = await api.post<ApiResponse<Cart>>("/cart/items", {
+    const { data } = await apiClient.post<ApiResponse<Cart>>("/cart/items", {
      productId,
      qty
     });
@@ -57,7 +57,7 @@ if (error instanceof AxiosError) {
 // Patch Cart
 export async function PatchCartItems(itemId: number, qty:number) {
  try {
-    const { data } = await api.patch<ApiResponse<Cart>>(`/cart/items/${itemId}`, {
+    const { data } = await apiClient.patch<ApiResponse<Cart>>(`/cart/items/${itemId}`, {
      qty
     });
     return data.data;
@@ -76,7 +76,7 @@ if (error instanceof AxiosError) {
 // Delete Cart Items
 export async function deleteCartItems(itemId: number): Promise<Cart> {
   try {
-    const { data } = await api.delete<ApiResponse<Cart>>(`/cart/items/${itemId}`);
+    const { data } = await apiClient.delete<ApiResponse<Cart>>(`/cart/items/${itemId}`);
     return data.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {

@@ -4,14 +4,12 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { ApiError } from "@/types/Api.type";
 import { productSchema } from "@/lib/validation/product.validation";
-import { usePostSeller } from "@/hooks/useProducts";
 import z from "zod";
+import { postSellerProducts } from "@/services/product.service"; // ✅ Import direct service
 
 const useSellerProductForm = () => {
   const router = useRouter();
-  const { mutate: addProduct, isPending, isError, error } = usePostSeller();
 
-  // ✅ Use z.output so we get transformed types (numbers)
   const {
     register,
     handleSubmit,
@@ -31,24 +29,30 @@ const useSellerProductForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<z.input<typeof productSchema>> = (data) => {
-    const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("description", data.description || "");
-    formData.append("price", data.price.toString());
-    formData.append("stock", data.stock.toString());
-    formData.append("categoryId", data.categoryId.toString());
-    data.images?.forEach((file) => formData.append("images", file));
+  const onSubmit: SubmitHandler<z.input<typeof productSchema>> = async (
+    data
+  ) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description || "");
+      formData.append("price", data.price.toString());
+      formData.append("stock", data.stock.toString());
+      formData.append("categoryId", data.categoryId.toString());
 
-    addProduct(formData, {
-      onSuccess: () => {
-        reset();
-        router.push("/seller/products");
-      },
-    });
+      data.images?.forEach((file) => formData.append("images", file));
+
+      // ✅ Directly call your backend API
+      await postSellerProducts(formData);
+
+      reset();
+      router.push("/seller/products");
+    } catch (error) {
+      const err = error as AxiosError<ApiError>;
+
+      console.error("Failed to add product:", err.response?.data?.message);
+    }
   };
-
-  const errorMessage = (error as AxiosError<ApiError>)?.response?.data?.message;
 
   return {
     register,
@@ -56,9 +60,6 @@ const useSellerProductForm = () => {
     errors,
     reset,
     onSubmit,
-    isPending,
-    isError,
-    errorMessage,
     setValue,
     watch,
   };

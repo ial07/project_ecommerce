@@ -9,48 +9,56 @@ import { Upload, X } from "lucide-react";
 
 interface ImageUploaderProps {
   label?: string;
-  onFileChange?: (file: File | null) => void;
-  defaultPreview?: string;
+  onFilesChange?: (files: File[]) => void; // ✅ now supports multiple files
+  defaultPreviews?: string[];
   className?: string;
 }
 
 export function ImageUploader({
-  label = "Upload Image",
-  onFileChange,
-  defaultPreview,
+  label = "Upload Images",
+  onFilesChange,
+  defaultPreviews = [],
   className,
 }: ImageUploaderProps) {
-  const [preview, setPreview] = useState<string | null>(defaultPreview || null);
-  const [file, setFile] = useState<File | null>(null);
+  const [previews, setPreviews] = useState<string[]>(defaultPreviews);
+  const [files, setFiles] = useState<File[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  // ✅ Handle multiple file uploads
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      const reader = new FileReader();
-      reader.onload = () => setPreview(reader.result as string);
-      reader.readAsDataURL(selectedFile);
-      onFileChange?.(selectedFile);
+    const selectedFiles = Array.from(e.target.files || []);
+    if (selectedFiles.length > 0) {
+      const newPreviews = selectedFiles.map((file) =>
+        URL.createObjectURL(file)
+      );
+      const updatedFiles = [...files, ...selectedFiles];
+      const updatedPreviews = [...previews, ...newPreviews];
+      setFiles(updatedFiles);
+      setPreviews(updatedPreviews);
+      onFilesChange?.(updatedFiles);
     }
   };
 
-  const handleRemove = () => {
-    setFile(null);
-    setPreview(null);
-    if (inputRef.current) inputRef.current.value = "";
-    onFileChange?.(null);
+  // ✅ Remove specific file
+  const handleRemove = (index: number) => {
+    const newFiles = files.filter((_, i) => i !== index);
+    const newPreviews = previews.filter((_, i) => i !== index);
+    setFiles(newFiles);
+    setPreviews(newPreviews);
+    onFilesChange?.(newFiles);
   };
 
+  // ✅ Handle drag-and-drop multiple files
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const droppedFile = e.dataTransfer.files?.[0];
-    if (droppedFile) {
-      setFile(droppedFile);
-      const reader = new FileReader();
-      reader.onload = () => setPreview(reader.result as string);
-      reader.readAsDataURL(droppedFile);
-      onFileChange?.(droppedFile);
+    const droppedFiles = Array.from(e.dataTransfer.files || []);
+    if (droppedFiles.length > 0) {
+      const newPreviews = droppedFiles.map((file) => URL.createObjectURL(file));
+      const updatedFiles = [...files, ...droppedFiles];
+      const updatedPreviews = [...previews, ...newPreviews];
+      setFiles(updatedFiles);
+      setPreviews(updatedPreviews);
+      onFilesChange?.(updatedFiles);
     }
   };
 
@@ -65,42 +73,44 @@ export function ImageUploader({
         onDragOver={(e) => e.preventDefault()}
         className={cn(
           "relative flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-6 cursor-pointer transition hover:bg-muted/50",
-          preview ? "border-muted-foreground/30" : "border-muted-foreground/10"
+          "border-muted-foreground/10"
         )}
         onClick={() => inputRef.current?.click()}
       >
-        {preview ? (
-          <div className="relative w-full h-48">
-            <Image
-              src={preview}
-              alt="Preview"
-              fill
-              className="object-cover rounded-lg"
-            />
-            <Button
-              size="icon"
-              variant="destructive"
-              className="absolute top-2 right-2 rounded-full"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRemove();
-              }}
-            >
-              <X className="h-4 w-4" />
-            </Button>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 w-full">
+          {previews.map((preview, index) => (
+            <div key={index} className="relative w-full aspect-square">
+              <Image
+                src={preview}
+                alt={`Preview ${index}`}
+                fill
+                className="object-cover rounded-lg"
+              />
+              <Button
+                size="icon"
+                variant="destructive"
+                className="absolute top-2 right-2 rounded-full"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemove(index);
+                }}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+
+          <div className="flex flex-col items-center justify-center border-2 border-dashed border-muted-foreground/20 rounded-lg aspect-square text-muted-foreground hover:bg-muted/30 transition">
+            <Upload className="h-6 w-6 mb-1" />
+            <p className="text-xs text-center">Add images</p>
           </div>
-        ) : (
-          <div className="flex flex-col items-center gap-2 text-center text-muted-foreground">
-            <Upload className="h-6 w-6" />
-            <p className="text-sm">
-              Drag and drop your image here, or click to upload
-            </p>
-          </div>
-        )}
+        </div>
+
         <input
           ref={inputRef}
           type="file"
           accept="image/*"
+          multiple // ✅ multiple upload support
           className="hidden"
           onChange={handleFileChange}
         />

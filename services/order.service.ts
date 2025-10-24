@@ -1,14 +1,14 @@
 import { ApiResponse } from "@/types/Api.type";
-import api from "./api.service";
 import { AxiosError } from "axios";
 import { Order, OrderResponse } from "@/types/Order.type";
 import { Address } from "@/types/Address.type";
+import apiClient from "./apiClient.service";
 
 
 // Post Order
 export async function PostOrderCheckout(address:Address, shippingMethod:string) {
  try {
-    const { data } = await api.post<ApiResponse<Order>>("/orders/checkout", {
+    const { data } = await apiClient.post<ApiResponse<Order>>("/orders/checkout", {
      address,
      shippingMethod
     });
@@ -33,7 +33,7 @@ export async function GetMyOrders(
 ): Promise<OrderResponse> {
  try {
      const params: Record<string, string | number> = { page, limit };
-    const { data } = await api.get<ApiResponse<OrderResponse>>(`/orders/my`, {
+    const { data } = await apiClient.get<ApiResponse<OrderResponse>>(`/orders/my`, {
       params,
     });
     return data.data;
@@ -52,7 +52,7 @@ export async function GetMyOrders(
 // Get Order By Id
 export async function getOrdersById(id: number): Promise<Order> {
   try {
-    const { data } = await api.get<ApiResponse<Order>>(`/orders/${id}`);
+    const { data } = await apiClient.get<ApiResponse<Order>>(`/orders/${id}`);
     return data.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
@@ -68,7 +68,7 @@ export async function getOrdersById(id: number): Promise<Order> {
 // Patch order when items is completed
 export async function PatchOrderItemsComplete(id: number) {
  try {
-    const { data } = await api.patch<ApiResponse<Order>>(`/orders/items/${id}/complete`);
+    const { data } = await apiClient.patch<ApiResponse<Order>>(`/orders/items/${id}/complete`);
     return data.data;
   } catch (error: unknown) {
 if (error instanceof AxiosError) {

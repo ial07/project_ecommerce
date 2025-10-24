@@ -63,11 +63,7 @@ const SellerProductForm: React.FC = () => {
 
       <ImageUploader
         label="Product Image"
-        onFileChange={(file) => {
-          if (file) {
-            setValue("images", [...(images ?? []), file]);
-          }
-        }}
+        onFilesChange={(files) => setValue("images", files)}
       />
       {errors.images && <p className="text-red-500">{errors.images.message}</p>}
 

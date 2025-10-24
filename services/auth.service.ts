@@ -1,13 +1,13 @@
 import type { User } from "@/types/User.type";
 import type { ApiResponse } from "@/types/Api.type";
 import type { AuthResponse } from "@/types/Auth.type";
-import api from "./api.service";
 import { AxiosError } from "axios";
+import apiClient from "./apiClient.service";
 
 // login
 export async function loginUser(email: string, password: string) {
  try {
-    const { data } = await api.post<ApiResponse<AuthResponse>>("/auth/login", {
+    const { data } = await apiClient.post<ApiResponse<AuthResponse>>("/auth/login", {
       email,
       password,
     });
@@ -28,7 +28,7 @@ if (error instanceof AxiosError) {
 export async function registerUser(name: string, email: string, password: string) {
 const avatarUrl = "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg";
     try {
-    const { data } = await api.post<ApiResponse<User>>("/auth/register", {
+    const { data } = await apiClient.post<ApiResponse<User>>("/auth/register", {
       name,
       email,
       password,

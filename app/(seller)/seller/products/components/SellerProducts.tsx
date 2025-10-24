@@ -74,6 +74,12 @@ const SellerProducts: React.FC = () => {
                 </TableCell>
               ))}
             </TableRow>
+          ) : data?.products.length == 0 ? (
+            <TableRow>
+              <TableCell className="font-medium text-center" colSpan={5}>
+                <div>No products yet</div>
+              </TableCell>
+            </TableRow>
           ) : (
             data?.products.map((p, i) => (
               <TableRow key={p.id}>

@@ -1,11 +1,11 @@
-import api from "./api.service";
 import { ApiResponse } from "@/types/Api.type";
 import { Shop } from "@/types/Shop.type";
 import { AxiosError } from "axios";
+import apiClient from "./apiClient.service";
 
 export async function getSellerShop(): Promise<Shop> {
   try {
-    const { data } = await api.get<ApiResponse<Shop>>("/seller/shop");
+    const { data } = await apiClient.get<ApiResponse<Shop>>("/seller/shop");
     return data.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
@@ -26,7 +26,7 @@ export async function PostSellerActivate(
   logo:string | null = "https://img.freepik.com/premium-vector/shop-store-icon-vector-logo-template_917138-2081.jpg"
 ) {
  try {
-    const { data } = await api.post<ApiResponse<Shop>>("/seller/activate", {
+    const { data } = await apiClient.post<ApiResponse<Shop>>("/seller/activate", {
      name,
      slug,
      address,
@@ -50,7 +50,7 @@ export async function PostSellerActivate(
 // Patch Seller
 export async function PatchSellerShop(name: string, address: string,isActive:boolean ) {
  try {
-    const { data } = await api.patch<ApiResponse<Shop>>(`/seller/shop`, {
+    const { data } = await apiClient.patch<ApiResponse<Shop>>(`/seller/shop`, {
      name,
      address,
      isActive

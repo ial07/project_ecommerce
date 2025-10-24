@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
     const categoryId = Number(formData.get("categoryId"));
     const isActive = formData.get("isActive") === "true";
     const images = formData.getAll("images") as File[];
+    
 
     // Validate required fields
     if (!title || isNaN(price) || isNaN(stock) || isNaN(categoryId)) {
@@ -78,6 +79,7 @@ export async function POST(req: NextRequest) {
       {
         headers: {
           Authorization: authHeader,
+          "Content-Type": "multipart/form-data",
         },
       }
     );

@@ -1,7 +1,7 @@
 import { CategoriesResponse } from "@/types/Category.type";
 import { AxiosError } from "axios";
-import api from "./api.service";
 import { ApiResponse } from "@/types/Api.type";
+import apiClient from "./apiClient.service";
 
 // Get Categories
 export async function GetCategories(
@@ -10,7 +10,7 @@ export async function GetCategories(
 ): Promise<CategoriesResponse> {
  try {
      const params: Record<string, string | number> = { page, limit };
-    const { data } = await api.get<ApiResponse<CategoriesResponse>>(`/categories`, {
+    const { data } = await apiClient.get<ApiResponse<CategoriesResponse>>(`/categories`, {
       params,
     });
     return data.data;
